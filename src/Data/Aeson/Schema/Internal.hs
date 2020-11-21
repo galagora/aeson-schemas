@@ -10,6 +10,7 @@ Internal definitions for declaring JSON schemas.
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DefaultSignatures #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
@@ -73,6 +74,7 @@ import Data.Aeson.Schema.Type
 import Data.Aeson.Schema.Utils.All (All(..))
 import Data.Aeson.Schema.Utils.Invariant (unreachable)
 import Data.Aeson.Schema.Utils.Sum (SumType(..))
+import GHC.Generics (Generic)
 
 {- Schema-validated JSON object -}
 
@@ -81,7 +83,7 @@ import Data.Aeson.Schema.Utils.Sum (SumType(..))
 -- Has a 'FromJSON' instance, so you can use the usual @Data.Aeson@ decoding functions.
 --
 -- > obj = decode "{\"a\": 1}" :: Maybe (Object [schema| { a: Int } |])
-newtype Object (schema :: Schema) = UnsafeObject (HashMap Text Dynamic)
+newtype Object (schema :: Schema) = UnsafeObject (HashMap Text Dynamic) deriving Generic
 
 instance IsSchema schema => Show (Object schema) where
   showsPrec _ = showValue @(ToSchemaObject schema)
